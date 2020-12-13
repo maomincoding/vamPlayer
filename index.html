@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>自定义视频播放器</title>
+    <style>
+      *{
+        margin: 0;
+        padding: 0;
+      }
+      #v1 {
+        width: 450px;
+        height: 254px;
+      }
+      #div1 {
+        width: 300px;
+        height: 10px;
+        background: #666;
+        margin-top: 10px;
+        overflow: hidden;
+        position: relative;
+      }
+      #div2 {
+        width: 60px;
+        height: 10px;
+        background: red;
+        position: absolute;
+        left: 0;
+        top: 0;
+      }
+      #div3 {
+        width: 300px;
+        height: 10px;
+        margin-top: 10px;
+        background: #666;
+        overflow: hidden;
+        position: relative;
+      }
+      #div4 {
+        width: 60px;
+        height: 10px;
+        background: yellow;
+        position: absolute;
+        left: 240px;
+        top: 0;
+      }
+    </style>
+  </head>
+  <body>
+    <video id="v1">
+      <source src="https://mos-vod-drcn.dbankcdn.cn/P_VT/video_injection/A91343E9D/v3/9AB0A7921049102362779584128/MP4Mix_H.264_1920x1080_6000_HEAAC1_PVC_NoCut.mp4"/>
+      <source />
+    </video>
+    <div>
+      <input type="button" value="播放" />
+      <input type="button" value="00:00:00" />
+      <input type="button" value="00:00:00" />
+      <input type="button" value="静音" />
+      <input type="button" value="全屏" />
+      <select id="select">
+        <option value="1">1x</option>
+        <option value="0.5">0.5x</option>
+        <option value="1.25">1.25x</option>
+        <option value="1.5">1.5x</option>
+        <option value="2">2x</option>
+      </select>
+    </div>
+    <div id="div1">
+      <div id="div2"></div>
+    </div>
+    <div id="div3">
+      <div id="div4"></div>
+    </div>
+    <script>
+      const oV = document.getElementById("v1");
+      const aInput = document.getElementsByTagName("input");
+      const oDiv1 = document.getElementById("div1");
+      const oDiv2 = document.getElementById("div2");
+      const oDiv3 = document.getElementById("div3");
+      const oDiv4 = document.getElementById("div4");
+      const select = document.getElementById("select");
+
+      let timer = null;
+      let disX = 0;
+      let disX2 = 0;
+
+      // 播放/暂停
+      aInput[0].onclick = function () {
+        if (oV.paused) {
+          oV.play();
+          this.value = "暂停";
+          nowTime();
+          timer = setInterval(nowTime, 1000);
+        } else {
+          oV.pause();
+          this.value = "播放";
+          clearInterval(timer);
+        }
+      };
+      // 总时长
+      oV.oncanplay = function () {
+        aInput[2].value = changeTime(oV.duration);
+      };
+      // 播放时长
+      function nowTime() {
+        aInput[1].value = changeTime(oV.currentTime);
+        let scale = oV.currentTime / oV.duration;
+        oDiv2.style.left = scale * 240 + "px";
+      }
+      // 静音/取消静音
+      aInput[3].onclick = function () {
+        if (oV.muted) {
+          oV.volume = 1;
+          this.value = "静音";
+          oV.muted = false;
+        } else {
+          oV.volume = 0;
+          this.value = "取消静音";
+          oV.muted = true;
+        }
+      };
+      // 全屏
+      aInput[4].onclick = function () {
+        oV.requestFullscreen();
+      };
+      // 播放进度条
+      oDiv2.onmousedown = function (ev) {
+        let ev1 = ev || window.event;
+        disX = ev1.clientX - oDiv2.offsetLeft;
+
+        document.onmousemove = function (ev) {
+          let ev2 = ev || window.event;
+          let L = ev2.clientX - disX;
+          if (L < 0) {
+            L = 0;
+          } else if (L > oDiv1.offsetWidth - oDiv2.offsetWidth) {
+            L = oDiv1.offsetWidth - oDiv2.offsetWidth;
+          }
+          oDiv2.style.left = L + "px";
+
+          let scale = L / (oDiv1.offsetWidth - oDiv2.offsetWidth);
+          oV.currentTime = scale * oV.duration;
+          nowTime();
+        };
+
+        document.onmouseup = function () {
+          document.onmousemove = null;
+        };
+
+        return false;
+      };
+      // 音量控制
+      oDiv4.onmousedown = function (ev) {
+        let ev1 = ev || window.event;
+        disX = ev1.clientX - oDiv4.offsetLeft;
+
+        document.onmousemove = function (ev) {
+          let ev2 = ev || window.event;
+          let L = ev2.clientX - disX;
+          if (L < 0) {
+            L = 0;
+          } else if (L > oDiv3.offsetWidth - oDiv4.offsetWidth) {
+            L = oDiv3.offsetWidth - oDiv4.offsetWidth;
+          }
+          oDiv4.style.left = L + "px";
+          let scale = L / (oDiv1.offsetWidth - oDiv2.offsetWidth);
+          oV.volume = scale;
+        };
+
+        document.onmouseup = function () {
+          document.onmousemove = null;
+        };
+
+        return false;
+      };
+      // 播放速度
+      select.onchange = function (e){
+        let ev = e || window.event;
+        oV.playbackRate = ev.target.value;
+      }
+      // 时间格式化
+      function changeTime(iNum) {
+        let iN = parseInt(iNum);
+        const iH = toZero(Math.floor(iN / 3600));
+        const iM = toZero(Math.floor((iN % 3600) / 60));
+        const iS = toZero(Math.floor(iN % 60));
+
+        return iH + ":" + iM + ":" + iS;
+      }
+      // 整0处理
+      function toZero(num) {
+        if (num <= 9) {
+          return "0" + num;
+        } else {
+          return "" + num;
+        }
+      }
+    </script>
+  </body>
+</html>
