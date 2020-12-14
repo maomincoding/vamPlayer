@@ -50,7 +50,7 @@
         right: 0;
         top: 0;
       }
-      #video-box{
+      #video-box {
         position: relative;
         width: 450px;
         height: 254px;
@@ -73,6 +73,9 @@
         <source />
       </video>
       <div id="tool">
+        <div id="div1">
+          <div id="div2"></div>
+        </div>
         <div>
           <input type="button" value="播放" />
           <input type="button" value="00:00:00" />
@@ -87,12 +90,9 @@
             <option value="2">2x</option>
           </select>
         </div>
-        <div id="div1">
-          <div id="div2"></div>
-        </div>
-        <div id="div3">
+        <!-- <div id="div3">
           <div id="div4"></div>
-        </div>
+        </div> -->
       </div>
     </div>
 
@@ -136,7 +136,7 @@
       function nowTime() {
         aInput[1].value = changeTime(oV.currentTime);
         let scale = oV.currentTime / oV.duration;
-        let w = oDiv1 - oDiv2;
+        let w = oDiv1.offsetWidth - oDiv2.offsetWidth;
         oDiv2.style.left = scale * w + "px";
       }
       // 静音/取消静音
@@ -153,7 +153,6 @@
       };
       // 全屏
       aInput[4].onclick = function () {
-        // fullScreen(oV);
         const w =
           document.documentElement.clientWidth || document.body.clientWidth;
         const h =
@@ -164,7 +163,6 @@
         videoBox.style.height = h + "px";
         oDiv1.style.width = w + "px";
         oDiv3.style.width = w + "px";
-        tool.style.display = "none";
       };
       // 播放进度条
       oDiv2.onmousedown = function (ev) {
