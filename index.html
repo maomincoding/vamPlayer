@@ -9,16 +9,17 @@
         margin: 0;
         padding: 0;
       }
+
       #v1 {
-        width: 450px;
-        height: 254px;
+        width: 100%;
+        height: 100%;
         object-fit: fill;
         overflow: hidden;
         border: 0;
         vertical-align: bottom;
       }
       #div1 {
-        width: 300px;
+        width: 450px;
         height: 10px;
         background: #666;
         margin-top: 10px;
@@ -34,7 +35,7 @@
         top: 0;
       }
       #div3 {
-        width: 300px;
+        width: 450px;
         height: 10px;
         margin-top: 10px;
         background: #666;
@@ -46,43 +47,55 @@
         height: 10px;
         background: yellow;
         position: absolute;
-        left: 240px;
+        right: 0;
         top: 0;
       }
-      #tool{
+      #video-box{
+        position: relative;
+        width: 450px;
+        height: 254px;
+        margin: 0 auto;
+      }
+      #tool {
         margin-top: 10px;
+        display: none;
+        position: absolute;
+        bottom: 0;
       }
     </style>
   </head>
   <body>
-    <video id="v1">
-      <source
-        src="https://mos-vod-drcn.dbankcdn.cn/P_VT/video_injection/A91343E9D/v3/9AB0A7921049102362779584128/MP4Mix_H.264_1920x1080_6000_HEAAC1_PVC_NoCut.mp4"
-      />
-      <source />
-    </video>
-    <div id="tool">
-      <div>
-        <input type="button" value="播放" />
-        <input type="button" value="00:00:00" />
-        <input type="button" value="00:00:00" />
-        <input type="button" value="静音" />
-        <input type="button" value="全屏" />
-        <select id="select">
-          <option value="1">1x</option>
-          <option value="0.5">0.5x</option>
-          <option value="1.25">1.25x</option>
-          <option value="1.5">1.5x</option>
-          <option value="2">2x</option>
-        </select>
-      </div>
-      <div id="div1">
-        <div id="div2"></div>
-      </div>
-      <div id="div3">
-        <div id="div4"></div>
+    <div id="video-box">
+      <video id="v1">
+        <source
+          src="https://mos-vod-drcn.dbankcdn.cn/P_VT/video_injection/A91343E9D/v3/9AB0A7921049102362779584128/MP4Mix_H.264_1920x1080_6000_HEAAC1_PVC_NoCut.mp4"
+        />
+        <source />
+      </video>
+      <div id="tool">
+        <div>
+          <input type="button" value="播放" />
+          <input type="button" value="00:00:00" />
+          <input type="button" value="00:00:00" />
+          <input type="button" value="静音" />
+          <input type="button" value="全屏" />
+          <select id="select">
+            <option value="1">1x</option>
+            <option value="0.5">0.5x</option>
+            <option value="1.25">1.25x</option>
+            <option value="1.5">1.5x</option>
+            <option value="2">2x</option>
+          </select>
+        </div>
+        <div id="div1">
+          <div id="div2"></div>
+        </div>
+        <div id="div3">
+          <div id="div4"></div>
+        </div>
       </div>
     </div>
+
     <script>
       const oV = document.getElementById("v1");
       const aInput = document.getElementsByTagName("input");
@@ -92,10 +105,16 @@
       const oDiv4 = document.getElementById("div4");
       const select = document.getElementById("select");
       const tool = document.getElementById("tool");
+      const videoBox = document.getElementById("video-box");
       let timer = null;
       let disX = 0;
       let disX2 = 0;
-
+      videoBox.onmouseover = function () {
+        tool.style.display = "block";
+      };
+      videoBox.onmouseleave = function () {
+        tool.style.display = "none";
+      };
       // 播放/暂停
       aInput[0].onclick = function () {
         if (oV.paused) {
@@ -117,7 +136,8 @@
       function nowTime() {
         aInput[1].value = changeTime(oV.currentTime);
         let scale = oV.currentTime / oV.duration;
-        oDiv2.style.left = scale * 240 + "px";
+        let w = oDiv1 - oDiv2;
+        oDiv2.style.left = scale * w + "px";
       }
       // 静音/取消静音
       aInput[3].onclick = function () {
@@ -140,7 +160,10 @@
           document.documentElement.clientHeight || document.body.clientHeight;
         oV.style.width = w + "px";
         oV.style.height = h + "px";
-
+        videoBox.style.width = w + "px";
+        videoBox.style.height = h + "px";
+        oDiv1.style.width = w + "px";
+        oDiv3.style.width = w + "px";
         tool.style.display = "none";
       };
       // 播放进度条
