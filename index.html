@@ -5,13 +5,17 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>自定义视频播放器</title>
     <style>
-      *{
+      * {
         margin: 0;
         padding: 0;
       }
       #v1 {
         width: 450px;
         height: 254px;
+        object-fit: fill;
+        overflow: hidden;
+        border: 0;
+        vertical-align: bottom;
       }
       #div1 {
         width: 300px;
@@ -45,32 +49,39 @@
         left: 240px;
         top: 0;
       }
+      #tool{
+        margin-top: 10px;
+      }
     </style>
   </head>
   <body>
     <video id="v1">
-      <source src="https://mos-vod-drcn.dbankcdn.cn/P_VT/video_injection/A91343E9D/v3/9AB0A7921049102362779584128/MP4Mix_H.264_1920x1080_6000_HEAAC1_PVC_NoCut.mp4"/>
+      <source
+        src="https://mos-vod-drcn.dbankcdn.cn/P_VT/video_injection/A91343E9D/v3/9AB0A7921049102362779584128/MP4Mix_H.264_1920x1080_6000_HEAAC1_PVC_NoCut.mp4"
+      />
       <source />
     </video>
-    <div>
-      <input type="button" value="播放" />
-      <input type="button" value="00:00:00" />
-      <input type="button" value="00:00:00" />
-      <input type="button" value="静音" />
-      <input type="button" value="全屏" />
-      <select id="select">
-        <option value="1">1x</option>
-        <option value="0.5">0.5x</option>
-        <option value="1.25">1.25x</option>
-        <option value="1.5">1.5x</option>
-        <option value="2">2x</option>
-      </select>
-    </div>
-    <div id="div1">
-      <div id="div2"></div>
-    </div>
-    <div id="div3">
-      <div id="div4"></div>
+    <div id="tool">
+      <div>
+        <input type="button" value="播放" />
+        <input type="button" value="00:00:00" />
+        <input type="button" value="00:00:00" />
+        <input type="button" value="静音" />
+        <input type="button" value="全屏" />
+        <select id="select">
+          <option value="1">1x</option>
+          <option value="0.5">0.5x</option>
+          <option value="1.25">1.25x</option>
+          <option value="1.5">1.5x</option>
+          <option value="2">2x</option>
+        </select>
+      </div>
+      <div id="div1">
+        <div id="div2"></div>
+      </div>
+      <div id="div3">
+        <div id="div4"></div>
+      </div>
     </div>
     <script>
       const oV = document.getElementById("v1");
@@ -80,7 +91,7 @@
       const oDiv3 = document.getElementById("div3");
       const oDiv4 = document.getElementById("div4");
       const select = document.getElementById("select");
-
+      const tool = document.getElementById("tool");
       let timer = null;
       let disX = 0;
       let disX2 = 0;
@@ -122,7 +133,16 @@
       };
       // 全屏
       aInput[4].onclick = function () {
-        oV.requestFullscreen();
+        // fullScreen(oV);
+        // oV.requestFullscreen();
+        const w =
+          document.documentElement.clientWidth || document.body.clientWidth;
+        const h =
+          document.documentElement.clientHeight || document.body.clientHeight;
+        oV.style.width = w + "px";
+        oV.style.height = h + "px";
+
+        tool.style.display = "none";
       };
       // 播放进度条
       oDiv2.onmousedown = function (ev) {
@@ -175,9 +195,32 @@
         return false;
       };
       // 播放速度
-      select.onchange = function (e){
+      select.onchange = function (e) {
         let ev = e || window.event;
         oV.playbackRate = ev.target.value;
+      };
+      // 全屏
+      function fullScreen(el) {
+        const isFullscreen =
+          document.fullScreen ||
+          document.mozFullScreen ||
+          document.webkitIsFullScreen;
+        if (!isFullscreen) {
+          //进入全屏,多重短路表达式
+          (el.requestFullscreen && el.requestFullscreen()) ||
+            (el.mozRequestFullScreen && el.mozRequestFullScreen()) ||
+            (el.webkitRequestFullscreen && el.webkitRequestFullscreen()) ||
+            (el.msRequestFullscreen && el.msRequestFullscreen());
+        } else {
+          //退出全屏,三目运算符
+          document.exitFullscreen
+            ? document.exitFullscreen()
+            : document.mozCancelFullScreen
+            ? document.mozCancelFullScreen()
+            : document.webkitExitFullscreen
+            ? document.webkitExitFullscreen()
+            : "";
+        }
       }
       // 时间格式化
       function changeTime(iNum) {
