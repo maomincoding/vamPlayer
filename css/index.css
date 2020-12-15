@@ -2,7 +2,7 @@
     margin: 0;
     padding: 0;
   }
-  #video-box {
+  .video-box {
     position: relative;
     width: 800px;
     height: 450px;
@@ -17,19 +17,19 @@
     border: 0;
     vertical-align: bottom;
   }
-  #div1 {
+  .pv-bar {
     width: 100%;
     height: 10px;
     background: rgba(255,255,255,0.35);
     overflow: hidden;
     position: relative;
   }
-  #played{
+  .pv-played{
     width: 0px;
     height: 10px;
     background: rgba(72,133,240,1);
   }
-  #div2 {
+  .pv-dot {
     width: 10px;
     height: 10px;
     background: #fff;
@@ -59,7 +59,7 @@
     right: 0;
     top: 0;
   }
-  #tool {
+  .bottom-tool{
     width: 100%;
     position: absolute;
     bottom: -50px;
@@ -68,4 +68,14 @@
   }
   .pv-controls{
     padding: 10px 5px;
+  }
+  .icon-icon_play,.icon-bofang{
+    color: #fff;
+    font-size: 18px;
+  }
+  .hide{
+    display: none;
+  }
+  .icon-icon_play,.icon-bofang:hover{
+      cursor: pointer;
   }
