@@ -9,7 +9,7 @@
   </head>
   <body>
     <div class="video-box">
-      <video class="video-player">
+      <video class="video-player" preload="auto">
         <source
           src="https://mos-vod-drcn.dbankcdn.cn/P_VT/video_injection/A91343E9D/v3/9AB0A7921049102362779584128/MP4Mix_H.264_1920x1080_6000_HEAAC1_PVC_NoCut.mp4"
         />
@@ -21,27 +21,44 @@
           <div class="pv-dot"></div>
         </div>
         <div class="pv-controls">
-          <div class="play-btn">
-            <i class="iconfont icon-icon_play"></i>
-            <i class="iconfont icon-bofang hide"></i>
+          <div>
+            <div class="play-btn">
+              <i class="iconfont icon-bofang"></i>
+              <i class="iconfont icon-zanting hide"></i>
+            </div>
+            <div class="pv-time">
+              <span class="pv-currentTime">00:00:00</span>
+              <span>/</span>
+              <span class="pv-duration">00:00:00</span>
+            </div>
           </div>
-          <div class="pv-time">
-            <span class="pv-currentTime"></span>
-            <span>/</span>
-            <span class="pv-duration"></span>
+          <div>
+            <div class="pv-listen">
+              <i class="iconfont icon-yinliang"></i>
+              <i class="iconfont icon-jingyin hide"></i>
+            </div>
+            <div class="pv-speed">
+              <!-- <p></p>
+              <ul>
+                <li>1x</li>
+                <li>0.5x</li>
+                <li>1.25x</li>
+                <li>1.5x</li>
+                <li>2x</li>
+              </ul> -->
+              <select class="speed">
+                <option value="1">1x</option>
+                <option value="0.5">0.5x</option>
+                <option value="1.25">1.25x</option>
+                <option value="1.5">1.5x</option>
+                <option value="2">2x</option>
+              </select>
+            </div>
+            <div class="pv-screen">
+              <i class="iconfont icon-quanping"></i>
+              <i class="iconfont icon-huanyuan hide"></i>
+            </div>
           </div>
-          <!-- <input type="button" value="播放" />
-          <input type="button" value="00:00:00" />
-          <input type="button" value="00:00:00" />
-          <input type="button" value="静音" />
-          <input type="button" value="全屏" />
-          <select id="select">
-            <option value="1">1x</option>
-            <option value="0.5">0.5x</option>
-            <option value="1.25">1.25x</option>
-            <option value="1.5">1.5x</option>
-            <option value="2">2x</option>
-          </select> -->
         </div>
         <!-- <div id="div3">
           <div id="div4"></div>
@@ -50,175 +67,181 @@
     </div>
 
     <script>
-      function $(el) {
-        return document.querySelector(el);
-      }
-      const aInput = document.getElementsByTagName("input");
-      const oDiv2 = document.getElementById("div2");
-      const oDiv3 = document.getElementById("div3");
-      const oDiv4 = document.getElementById("div4");
-      const select = document.getElementById("select");
-      let timer = null;
-      let disX = 0;
-      let disX2 = 0;
-
-      // 底部控制栏
-      $(".video-box").onmouseenter = function () {
-        $(".bottom-tool").style.bottom = "0px";
-      };
-      $(".video-box").onmouseleave = function () {
-        $(".bottom-tool").style.bottom = "-50px";
-      };
-
-      // 播放/暂停
-      $(".play-btn").onclick = function () {
-        if ($(".video-player").paused) {
-          $(".video-player").play();
-          $(".icon-icon_play").style.display = "none";
-          $(".icon-bofang").style.display = "block";
-          nowTime();
-          timer = setInterval(nowTime, 1000);
-        } else {
-          $(".video-player").pause();
-          $(".icon-icon_play").style.display = "block";
-          $(".icon-bofang").style.display = "none";
-          clearInterval(timer);
+        function $(el) {
+          return document.querySelector(el);
         }
-      };
+        const aInput = document.getElementsByTagName("input");
+        const oDiv2 = document.getElementById("div2");
+        const oDiv3 = document.getElementById("div3");
+        const oDiv4 = document.getElementById("div4");
+        const select = document.getElementById("select");
+        let timer = null;
+        let disX = 0;
+        let disX2 = 0;
 
-      // 总时长
-      $(".video-player").oncanplay = function () {
-        $(".pv-duration").value = changeTime($(".video-player").duration);
-      };
-      
-      // 播放时长
-      function nowTime() {
-        $(".pv-currentTime").value = changeTime($(".video-player").currentTime);
-        let scale = $(".video-player").currentTime / $(".video-player").duration;
-        let w = $(".pv-bar").offsetWidth - $(".pv-dot").offsetWidth;
-        $(".pv-dot").style.left = scale * w + "px";
-        $(".pv-played").style.width = scale * w + "px";
-      }
-      // 静音/取消静音
-      aInput[3].onclick = function () {
-        if ($(".video-player").muted) {
-          $(".video-player").volume = 1;
-          this.value = "静音";
-          $(".video-player").muted = false;
-        } else {
-          $(".video-player").volume = 0;
-          this.value = "取消静音";
-          $(".video-player").muted = true;
-        }
-      };
-      // 全屏
-      aInput[4].onclick = function () {
-        const w =
-          document.documentElement.clientWidth || document.body.clientWidth;
-        const h =
-          document.documentElement.clientHeight || document.body.clientHeight;
-        $(".video-player").style.width = w + "px";
-        $(".video-player").style.height = h + "px";
-        videoBox.style.width = w + "px";
-        videoBox.style.height = h + "px";
-        $(".pv-bar").style.width = w + "px";
-        oDiv3.style.width = w + "px";
-      };
-      // 播放进度条
-      $(".pv-dot").onmousedown = function (ev) {
-        let ev1 = ev || window.event;
-        disX = ev1.clientX -  $(".pv-dot").offsetLeft;
+        // 底部控制栏
+        // $(".video-box").onmouseenter = function () {
+        //   $(".bottom-tool").style.bottom = "0px";
+        // };
+        // $(".video-box").onmouseleave = function () {
+        //   $(".bottom-tool").style.bottom = "-50px";
+        // };
 
-        document.onmousemove = function (ev) {
-          let ev2 = ev || window.event;
-          let L = ev2.clientX - disX;
-          if (L < 0) {
-            L = 0;
-          } else if (L > $(".pv-bar").offsetWidth -  $(".pv-dot").offsetWidth) {
-            L = $("..pv-bar").offsetWidth -  $(".pv-dot").offsetWidth;
+        // 播放/暂停
+        $(".play-btn").onclick = function () {
+          if ($(".video-player").paused) {
+            $(".video-player").play();
+            $(".icon-bofang").style.display = "none";
+            $(".icon-zanting").style.display = "block";
+            nowTime();
+            timer = setInterval(nowTime, 1000);
+          } else {
+            $(".video-player").pause();
+            $(".icon-bofang").style.display = "block";
+            $(".icon-zanting").style.display = "none";
+            clearInterval(timer);
           }
-          $(".pv-dot").style.left = L + "px";
-
-          let scale = L / ($(".pv-bar").offsetWidth -  $(".pv-dot").offsetWidth);
-          $(".video-player").currentTime = scale * $(".video-player").duration;
-          nowTime();
         };
+        // 总时长
+        $(".video-player").oncanplay = function () {
+            $(".pv-duration").innerHTML = changeTime($(".video-player").duration);
+        }
+        // 播放时长
+        function nowTime() {
+          $(".pv-currentTime").innerHTML = changeTime(
+            $(".video-player").currentTime
+          );
+          let scale =
+            $(".video-player").currentTime / $(".video-player").duration;
+          let w = $(".pv-bar").offsetWidth - $(".pv-dot").offsetWidth;
+          $(".pv-dot").style.left = scale * w + "px";
+          $(".pv-played").style.width = scale * w + "px";
+        }
+        // // 静音/取消静音
+        // aInput[3].onclick = function () {
+        //   if ($(".video-player").muted) {
+        //     $(".video-player").volume = 1;
+        //     this.value = "静音";
+        //     $(".video-player").muted = false;
+        //   } else {
+        //     $(".video-player").volume = 0;
+        //     this.value = "取消静音";
+        //     $(".video-player").muted = true;
+        //   }
+        // };
+        // // 全屏
+        // aInput[4].onclick = function () {
+        //   const w =
+        //     document.documentElement.clientWidth || document.body.clientWidth;
+        //   const h =
+        //     document.documentElement.clientHeight || document.body.clientHeight;
+        //   $(".video-player").style.width = w + "px";
+        //   $(".video-player").style.height = h + "px";
+        //   videoBox.style.width = w + "px";
+        //   videoBox.style.height = h + "px";
+        //   $(".pv-bar").style.width = w + "px";
+        //   oDiv3.style.width = w + "px";
+        // };
+        // 播放进度条
+        $(".pv-dot").onmousedown = function (ev) {
+          let ev1 = ev || window.event;
+          disX = ev1.clientX - $(".pv-dot").offsetLeft;
 
-        document.onmouseup = function () {
-          document.onmousemove = null;
+          document.onmousemove = function (ev) {
+            let ev2 = ev || window.event;
+            let L = ev2.clientX - disX;
+            if (L < 0) {
+              L = 0;
+            } else if (
+              L >
+              $(".pv-bar").offsetWidth - $(".pv-dot").offsetWidth
+            ) {
+              L = $("..pv-bar").offsetWidth - $(".pv-dot").offsetWidth;
+            }
+            $(".pv-dot").style.left = L + "px";
+
+            let scale =
+              L / ($(".pv-bar").offsetWidth - $(".pv-dot").offsetWidth);
+            $(".video-player").currentTime =
+              scale * $(".video-player").duration;
+            nowTime();
+          };
+
+          document.onmouseup = function () {
+            document.onmousemove = null;
+          };
+
+          return false;
         };
+        // 音量控制
+        // oDiv4.onmousedown = function (ev) {
+        //   let ev1 = ev || window.event;
+        //   disX = ev1.clientX - oDiv4.offsetLeft;
 
-        return false;
-      };
-      // 音量控制
-      oDiv4.onmousedown = function (ev) {
-        let ev1 = ev || window.event;
-        disX = ev1.clientX - oDiv4.offsetLeft;
+        //   document.onmousemove = function (ev) {
+        //     let ev2 = ev || window.event;
+        //     let L = ev2.clientX - disX;
+        //     if (L < 0) {
+        //       L = 0;
+        //     } else if (L > oDiv3.offsetWidth - oDiv4.offsetWidth) {
+        //       L = oDiv3.offsetWidth - oDiv4.offsetWidth;
+        //     }
+        //     oDiv4.style.left = L + "px";
+        //     let scale = L / (oDiv3.offsetWidth -  oDiv4.offsetWidth);
+        //     $(".video-player").volume = scale;
+        //   };
 
-        document.onmousemove = function (ev) {
-          let ev2 = ev || window.event;
-          let L = ev2.clientX - disX;
-          if (L < 0) {
-            L = 0;
-          } else if (L > oDiv3.offsetWidth - oDiv4.offsetWidth) {
-            L = oDiv3.offsetWidth - oDiv4.offsetWidth;
+        //   document.onmouseup = function () {
+        //     document.onmousemove = null;
+        //   };
+
+        //   return false;
+        // };
+        // 播放速度
+        $(".speed").onchange = function (e) {
+          let ev = e || window.event;
+          $(".video-player").playbackRate = ev.target.value;
+        };
+        // 全屏
+        function fullScreen(el) {
+          const isFullscreen =
+            document.fullScreen ||
+            document.mozFullScreen ||
+            document.webkitIsFullScreen;
+          if (!isFullscreen) {
+            //进入全屏,多重短路表达式
+            (el.requestFullscreen && el.requestFullscreen()) ||
+              (el.mozRequestFullScreen && el.mozRequestFullScreen()) ||
+              (el.webkitRequestFullscreen && el.webkitRequestFullscreen()) ||
+              (el.msRequestFullscreen && el.msRequestFullscreen());
+          } else {
+            //退出全屏,三目运算符
+            document.exitFullscreen
+              ? document.exitFullscreen()
+              : document.mozCancelFullScreen
+              ? document.mozCancelFullScreen()
+              : document.webkitExitFullscreen
+              ? document.webkitExitFullscreen()
+              : "";
           }
-          oDiv4.style.left = L + "px";
-          let scale = L / (oDiv3.offsetWidth -  oDiv4.offsetWidth);
-          $(".video-player").volume = scale;
-        };
-
-        document.onmouseup = function () {
-          document.onmousemove = null;
-        };
-
-        return false;
-      };
-      // 播放速度
-      select.onchange = function (e) {
-        let ev = e || window.event;
-        $(".video-player").playbackRate = ev.target.value;
-      };
-      // 全屏
-      function fullScreen(el) {
-        const isFullscreen =
-          document.fullScreen ||
-          document.mozFullScreen ||
-          document.webkitIsFullScreen;
-        if (!isFullscreen) {
-          //进入全屏,多重短路表达式
-          (el.requestFullscreen && el.requestFullscreen()) ||
-            (el.mozRequestFullScreen && el.mozRequestFullScreen()) ||
-            (el.webkitRequestFullscreen && el.webkitRequestFullscreen()) ||
-            (el.msRequestFullscreen && el.msRequestFullscreen());
-        } else {
-          //退出全屏,三目运算符
-          document.exitFullscreen
-            ? document.exitFullscreen()
-            : document.mozCancelFullScreen
-            ? document.mozCancelFullScreen()
-            : document.webkitExitFullscreen
-            ? document.webkitExitFullscreen()
-            : "";
         }
-      }
-      // 时间格式化
-      function changeTime(iNum) {
-        let iN = parseInt(iNum);
-        const iH = toZero(Math.floor(iN / 3600));
-        const iM = toZero(Math.floor((iN % 3600) / 60));
-        const iS = toZero(Math.floor(iN % 60));
+        // 时间格式化
+        function changeTime(iNum) {
+          let iN = parseInt(iNum);
+          const iH = toZero(Math.floor(iN / 3600));
+          const iM = toZero(Math.floor((iN % 3600) / 60));
+          const iS = toZero(Math.floor(iN % 60));
 
-        return iH + ":" + iM + ":" + iS;
-      }
-      // 整0处理
-      function toZero(num) {
-        if (num <= 9) {
-          return "0" + num;
-        } else {
-          return "" + num;
+          return iH + ":" + iM + ":" + iS;
         }
-      }
+        // 整0处理
+        function toZero(num) {
+          if (num <= 9) {
+            return "0" + num;
+          } else {
+            return "" + num;
+          }
+        }
     </script>
   </body>
 </html>
