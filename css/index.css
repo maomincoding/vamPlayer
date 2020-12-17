@@ -67,7 +67,7 @@
     background: rgba(0,16,27,0.7);
   }
   .pv-controls{
-    padding: 10px 5px;
+    padding: 10px;
     color: #fff;
     display: flex;
     align-items: center;
@@ -79,13 +79,16 @@
     justify-content: space-between;
     align-items: center;
   }
-  .play-btn{
+  .play-btn,.pv-listen,.pv-screen{
     width: 18px;
     height: 18px;
   }
   .pv-time{
     margin-left:10px ;
     font-size: 12px;
+  }
+  .ml{
+    margin-left: 25px;
   }
   .pv-currentTime{
     box-sizing: border-box;

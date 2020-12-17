@@ -33,11 +33,11 @@
             </div>
           </div>
           <div>
-            <div class="pv-listen">
+            <div class="pv-listen ml">
               <i class="iconfont icon-yinliang"></i>
               <i class="iconfont icon-jingyin hide"></i>
             </div>
-            <div class="pv-speed">
+            <div class="pv-speed ml">
               <!-- <p></p>
               <ul>
                 <li>1x</li>
@@ -54,7 +54,7 @@
                 <option value="2">2x</option>
               </select>
             </div>
-            <div class="pv-screen">
+            <div class="pv-screen ml">
               <i class="iconfont icon-quanping"></i>
               <i class="iconfont icon-huanyuan hide"></i>
             </div>
@@ -80,12 +80,12 @@
         let disX2 = 0;
 
         // 底部控制栏
-        $(".video-box").onmouseenter = function () {
-          $(".bottom-tool").style.bottom = "0px";
-        };
-        $(".video-box").onmouseleave = function () {
-          $(".bottom-tool").style.bottom = "-50px";
-        };
+        // $(".video-box").onmouseenter = function () {
+        //   $(".bottom-tool").style.bottom = "0px";
+        // };
+        // $(".video-box").onmouseleave = function () {
+        //   $(".bottom-tool").style.bottom = "-50px";
+        // };
 
         // 播放/暂停
         $(".play-btn").onclick = function () {
@@ -117,31 +117,46 @@
           $(".pv-dot").style.left = scale * w + "px";
           $(".pv-played").style.width = scale * w + "px";
         }
-        // // 静音/取消静音
-        // aInput[3].onclick = function () {
-        //   if ($(".video-player").muted) {
-        //     $(".video-player").volume = 1;
-        //     this.value = "静音";
-        //     $(".video-player").muted = false;
-        //   } else {
-        //     $(".video-player").volume = 0;
-        //     this.value = "取消静音";
-        //     $(".video-player").muted = true;
-        //   }
-        // };
-        // // 全屏
-        // aInput[4].onclick = function () {
-        //   const w =
-        //     document.documentElement.clientWidth || document.body.clientWidth;
-        //   const h =
-        //     document.documentElement.clientHeight || document.body.clientHeight;
-        //   $(".video-player").style.width = w + "px";
-        //   $(".video-player").style.height = h + "px";
-        //   videoBox.style.width = w + "px";
-        //   videoBox.style.height = h + "px";
-        //   $(".pv-bar").style.width = w + "px";
-        //   oDiv3.style.width = w + "px";
-        // };
+        // 静音/取消静音
+        $(".pv-listen").onclick = function () {
+          if ($(".video-player").muted) {
+            $(".video-player").volume = 1;
+            this.value = "静音";
+            $(".icon-jingyin").style.display = "none";
+            $(".icon-yinliang").style.display = "block";
+            $(".video-player").muted = false;
+          } else {
+            $(".video-player").volume = 0;
+            $(".icon-jingyin").style.display = "block";
+            $(".icon-yinliang").style.display = "none";
+            $(".video-player").muted = true;
+          }
+        };
+        let isfullScreen = false;
+        // 全屏
+        $(".pv-screen").onclick = function () {
+          const w =
+            document.documentElement.clientWidth || document.body.clientWidth;
+          const h =
+            document.documentElement.clientHeight || document.body.clientHeight;
+            isfullScreen = !isfullScreen;
+            if(!isfullScreen){
+              $(".video-player").style.width = w + "px";
+          $(".video-player").style.height = h + "px";
+          $(".video-box").style.width = w + "px";
+          $(".video-box").style.height = h + "px";
+          $(".pv-bar").style.width = w + "px";
+          
+          // oDiv3.style.width = w + "px";
+            }
+        else{
+          $(".video-player").style.width = 800 + "px";
+          $(".video-player").style.height = 450 + "px";
+          $(".video-box").style.width = 800 + "px";
+          $(".video-box").style.height = 450 + "px";
+          $(".pv-bar").style.width = 800 + "px";
+        }
+        };
         // 播放进度条
         $(".pv-dot").onmousedown = function (ev) {
           let ev1 = ev || window.event;
