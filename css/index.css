@@ -62,7 +62,7 @@
   .bottom-tool{
     width: 100%;
     position: absolute;
-    bottom: 0px;
+    bottom: 50px;
     transition: all 1s;
     background: rgba(0,16,27,0.7);
   }
