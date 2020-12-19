@@ -69,6 +69,8 @@ $(".play-btn").onclick = function () {
 $(".video-player").oncanplay = function () {
   $(".pv-duration").innerHTML = changeTime($(".video-player").duration);
 };
+
+// 播放结束
 $(".video-player").onended = function (params) {
   showEl(".icon-bofang");
   hideEl(".icon-zanting");
@@ -123,7 +125,7 @@ $(".pv-dot").onmousedown = function (ev) {
     if (L < 0) {
       L = 0;
     } else if (L > $(".pv-bar").offsetWidth - $(".pv-dot").offsetWidth) {
-      L = $("..pv-bar").offsetWidth - $(".pv-dot").offsetWidth;
+      L = $(".pv-bar").offsetWidth - $(".pv-dot").offsetWidth;
     }
     $(".pv-dot").style.left = L + "px";
 
@@ -173,7 +175,7 @@ $(".pv-ol").onmousedown = function (ev) {
 $(".selectList").onclick = function (e) {
   let ev = e || window.event;
   hideEl(".selectList");
-  $(".pv-spnum").innerText = e.target.innerText;
-  const value = e.target.innerText.replace("x", "");
+  $(".pv-spnum").innerText = ev.target.innerText;
+  const value = ev.target.innerText.replace("x", "");
   $(".video-player").playbackRate = value;
 };
