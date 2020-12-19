@@ -3,13 +3,13 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>视频播放器</title>
+    <title>VamVideo</title>
     <link rel="stylesheet" href="./css/iconfont/iconfont.css" />
     <link rel="stylesheet" href="./css/index.css" />
   </head>
   <body>
     <div class="video-box">
-      <video class="video-player" preload="auto">
+      <video class="video-player" preload="auto" poster="./img/bg.png">
         <source
           src="https://mos-vod-drcn.dbankcdn.cn/P_VT/video_injection/A91343E9D/v3/9AB0A7921049102362779584128/MP4Mix_H.264_1920x1080_6000_HEAAC1_PVC_NoCut.mp4"
         />
@@ -34,16 +34,13 @@
           </div>
           <div class="pc-con-r">
             <div class="pv-listen ml">
+              <div class="pv-yl">
+                <p class="pv-ol"></p>
+                <p class="pv-bg"></p>
+              </div>
               <div class="pv-iconyl">
                 <i class="iconfont icon-yinliang"></i>
                 <i class="iconfont icon-jingyin hide"></i>
-              </div>
-
-              <div class="pv-ylbar">
-                <div class="pv-yl">
-                  <p class="pv-ol"></p>
-                  <p class="pv-bg"></p>
-                </div>
               </div>
             </div>
             <div class="pv-speed ml">
@@ -64,210 +61,6 @@
         </div>
       </div>
     </div>
-
-    <script>
-      function $(el) {
-        return document.querySelector(el);
-      }
-      const oDiv3 = document.getElementById("div3");
-      const oDiv4 = document.getElementById("div4");
-      let timer = null;
-      let disX = 0;
-      let disY = 0;
-
-      // 底部控制栏
-      $(".video-box").onmouseenter = function () {
-        $(".bottom-tool").style.bottom = "0px";
-      };
-      $(".video-box").onmouseleave = function () {
-        $(".bottom-tool").style.bottom = "-50px";
-      };
-
-      // 倍速播放栏
-      $(".pv-spnum").onmouseover = function () {
-        $(".selectList").style.display = "block";
-      };
-      $(".pv-controls").onmouseleave = function () {
-        $(".selectList").style.display = "none";
-        $(".pv-ylbar").style.display = "none";
-      };
-      $(".pv-iconyl").onmouseover = function () {
-        $(".pv-ylbar").style.display = "block";
-      };
-      // 播放/暂停
-      $(".play-btn").onclick = function () {
-        if ($(".video-player").paused) {
-          $(".video-player").play();
-          $(".icon-bofang").style.display = "none";
-          $(".icon-zanting").style.display = "block";
-          nowTime();
-          timer = setInterval(nowTime, 1000);
-        } else {
-          $(".video-player").pause();
-          $(".icon-bofang").style.display = "block";
-          $(".icon-zanting").style.display = "none";
-          clearInterval(timer);
-        }
-      };
-      // 总时长
-      $(".video-player").oncanplay = function () {
-        $(".pv-duration").innerHTML = changeTime($(".video-player").duration);
-      };
-      $(".video-player").onended = function (params) {
-        $(".icon-bofang").style.display = "block";
-        $(".icon-zanting").style.display = "none";
-      };
-      // 播放时长
-      function nowTime() {
-        $(".pv-currentTime").innerHTML = changeTime(
-          $(".video-player").currentTime
-        );
-        let scale =
-          $(".video-player").currentTime / $(".video-player").duration;
-        let w = $(".pv-bar").offsetWidth - $(".pv-dot").offsetWidth;
-        $(".pv-dot").style.left = scale * w + "px";
-        $(".pv-played").style.width = scale * w + "px";
-      }
-      // 静音/取消静音
-      $(".pv-iconyl").onclick = function () {
-        if ($(".video-player").muted) {
-          $(".video-player").volume = 1;
-          this.value = "静音";
-          $(".icon-jingyin").style.display = "none";
-          $(".icon-yinliang").style.display = "block";
-          $(".video-player").muted = false;
-        } else {
-          $(".video-player").volume = 0;
-          $(".icon-jingyin").style.display = "block";
-          $(".icon-yinliang").style.display = "none";
-          $(".video-player").muted = true;
-        }
-      };
-      let isfullScreen = false;
-      // 全屏
-      $(".pv-screen").onclick = function () {
-        const w =
-          document.documentElement.clientWidth || document.body.clientWidth;
-        const h =
-          document.documentElement.clientHeight || document.body.clientHeight;
-        isfullScreen = !isfullScreen;
-        if (isfullScreen) {
-          $(".video-player").style.width = w + "px";
-          $(".video-player").style.height = h + "px";
-          $(".video-box").style.width = w + "px";
-          $(".video-box").style.height = h + "px";
-          $(".pv-bar").style.width = w + "px";
-          $(".icon-quanping").style.display = "none";
-          $(".icon-huanyuan").style.display = "block";
-        } else {
-          $(".video-player").style.width = 800 + "px";
-          $(".video-player").style.height = 450 + "px";
-          $(".video-box").style.width = 800 + "px";
-          $(".video-box").style.height = 450 + "px";
-          $(".pv-bar").style.width = 800 + "px";
-          $(".icon-quanping").style.display = "block";
-          $(".icon-huanyuan").style.display = "none";
-        }
-      };
-      // 播放进度条
-      $(".pv-dot").onmousedown = function (ev) {
-        let ev1 = ev || window.event;
-        disX = ev1.clientX - $(".pv-dot").offsetLeft;
-
-        document.onmousemove = function (ev) {
-          let ev2 = ev || window.event;
-          let L = ev2.clientX - disX;
-          if (L < 0) {
-            L = 0;
-          } else if (L > $(".pv-bar").offsetWidth - $(".pv-dot").offsetWidth) {
-            L = $("..pv-bar").offsetWidth - $(".pv-dot").offsetWidth;
-          }
-          $(".pv-dot").style.left = L + "px";
-
-          let scale = L / ($(".pv-bar").offsetWidth - $(".pv-dot").offsetWidth);
-          $(".video-player").currentTime = scale * $(".video-player").duration;
-          nowTime();
-        };
-
-        document.onmouseup = function () {
-          document.onmousemove = null;
-        };
-
-        return false;
-      };
-      // 音量控制
-      $(".pv-ol").onmousedown = function (ev) {
-        let ev1 = ev || window.event;
-        disY = ev1.clientY - $(".pv-ol").offsetTop;
-        console.log(disY);
-        document.onmousemove = function (ev) {
-          let ev2 = ev || window.event;
-          let L = ev2.clientY - disY;
-          if (L < 0) {
-            L = 0;
-          } else if (L > $(".pv-yl").offsetHeight - $(".pv-ol").offsetHeight) {
-            L = $(".pv-yl").offsetHeight - $(".pv-ol").offsetHeight;
-          }
-          $(".pv-ol").style.top = L + "px";
-          let scale = L / ($(".pv-yl").offsetHeight - $(".pv-ol").offsetHeight);
-          $(".pv-bg").style.height = $(".pv-ol").offsetTop + "px";
-          $(".video-player").volume = scale;
-        };
-
-        document.onmouseup = function () {
-          document.onmousemove = null;
-        };
-
-        return false;
-      };
-      // 播放速度
-      $(".selectList").onclick = function (e) {
-        let ev = e || window.event;
-        $(".selectList").style.display = "none";
-        $(".pv-spnum").innerText = e.target.innerText;
-        const value = e.target.innerText.replace("x", "");
-        $(".video-player").playbackRate = value;
-      };
-      // 全屏
-      function fullScreen(el) {
-        const isFullscreen =
-          document.fullScreen ||
-          document.mozFullScreen ||
-          document.webkitIsFullScreen;
-        if (!isFullscreen) {
-          //进入全屏,多重短路表达式
-          (el.requestFullscreen && el.requestFullscreen()) ||
-            (el.mozRequestFullScreen && el.mozRequestFullScreen()) ||
-            (el.webkitRequestFullscreen && el.webkitRequestFullscreen()) ||
-            (el.msRequestFullscreen && el.msRequestFullscreen());
-        } else {
-          //退出全屏,三目运算符
-          document.exitFullscreen
-            ? document.exitFullscreen()
-            : document.mozCancelFullScreen
-            ? document.mozCancelFullScreen()
-            : document.webkitExitFullscreen
-            ? document.webkitExitFullscreen()
-            : "";
-        }
-      }
-      // 时间格式化
-      function changeTime(iNum) {
-        let iN = parseInt(iNum);
-        const iH = toZero(Math.floor(iN / 3600));
-        const iM = toZero(Math.floor((iN % 3600) / 60));
-        const iS = toZero(Math.floor(iN % 60));
-
-        return iH + ":" + iM + ":" + iS;
-      }
-      // 整0处理
-      function toZero(num) {
-        if (num <= 9) {
-          return "0" + num;
-        } else {
-          return "" + num;
-        }
-      }
-    </script>
+    <script src="./js/index.js"></script>
   </body>
 </html>
