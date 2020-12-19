@@ -2,11 +2,14 @@
     margin: 0;
     padding: 0;
   }
+li{
+  list-style: none;
+}
   .video-box {
     position: relative;
     width: 800px;
     height: 450px;
-    margin: 30px auto;
+    margin: 0 auto;
     overflow: hidden;
   }
   .video-player{
@@ -62,7 +65,7 @@
   .bottom-tool{
     width: 100%;
     position: absolute;
-    bottom: 50px;
+    bottom: 0px;
     transition: all 1s;
     background: rgba(0,16,27,0.7);
   }
@@ -87,8 +90,25 @@
     margin-left:10px ;
     font-size: 12px;
   }
+  .pv-speed {
+    position: relative;
+  }
+  .selectList{
+    display: none;
+    position: absolute;
+    top:-150px;
+    left:-20px;
+    padding: 10px 0;
+    border-top-left-radius:8px ;
+    border-top-right-radius:8px ;
+    background: rgba(0,0,0,0.7);
+  }
+  .selectList li{
+    text-align: center;
+    padding: 2px 10px;
+  }
   .ml{
-    margin-left: 25px;
+    margin-left: 50px;
   }
   .pv-currentTime{
     box-sizing: border-box;
@@ -101,6 +121,6 @@
   .hide{
     display: none;
   }
-  .icon-zanting,.icon-bofang:hover{
+  .icon-zanting,.icon-bofang:hover,.pv-speed,.pv-listen,.pv-screen{
       cursor: pointer;
   }
