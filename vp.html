@@ -9,12 +9,7 @@
   </head>
   <body>
     <div class="video-box" onmouseenter="vp.bottomTup()" onmouseleave="vp.bottomTdow()">
-      <video class="video-player" preload="auto" poster="./img/bg.png" oncanplay="vp.useOnplay()" onended="vp.useEnd()">
-        <source
-          src="https://mos-vod-drcn.dbankcdn.cn/P_VT/video_injection/A91343E9D/v3/9AB0A7921049102362779584128/MP4Mix_H.264_1920x1080_6000_HEAAC1_PVC_NoCut.mp4"
-        />
-        <source />
-      </video>
+      <video class="video-player" oncanplay="vp.useOnplay()" onended="vp.useEnd()"></video>
       <div class="bottom-tool">
         <div class="pv-bar">
           <div class="pv-played"></div>
@@ -63,7 +58,20 @@
     </div>
     <script src="./js/vp.js"></script>
     <script>
-      let vp = new VamVideo();
+      let vp = new VamVideo(
+        document.querySelector(".video-box"), // 挂载节点
+        { // 视频属性
+          poster:"./img/bg.png",
+          src:"https://mos-vod-drcn.dbankcdn.cn/P_VT/video_injection/A91343E9D/v3/9AB0A7921049102362779584128/MP4Mix_H.264_1920x1080_6000_HEAAC1_PVC_NoCut.mp4",
+          preload:"auto",
+          // loop:"loop",
+          // autoplay:"autoplay"
+        },
+        { // 视频样式
+          width:"1000px",
+          height:"600px"
+        }
+      );
     </script>
   </body>
 </html>
