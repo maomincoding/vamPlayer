@@ -21,7 +21,7 @@
           <div class="pv-dot"></div>
         </div>
         <div class="pv-controls">
-          <div>
+          <div class="pc-con-l">
             <div class="play-btn">
               <i class="iconfont icon-bofang"></i>
               <i class="iconfont icon-zanting hide"></i>
@@ -32,27 +32,29 @@
               <span class="pv-duration">00:00:00</span>
             </div>
           </div>
-          <div>
+          <div class="pc-con-r">
             <div class="pv-listen ml">
-              <i class="iconfont icon-yinliang"></i>
-              <i class="iconfont icon-jingyin hide"></i>
+              <div class="pv-iconyl">
+                <i class="iconfont icon-yinliang"></i>
+                <i class="iconfont icon-jingyin hide"></i>
+              </div>
+
+              <div class="pv-ylbar">
+                <div class="pv-yl">
+                  <p class="pv-ol"></p>
+                  <p class="pv-bg"></p>
+                </div>
+              </div>
             </div>
             <div class="pv-speed ml">
               <p class="pv-spnum">1x</p>
               <ul class="selectList">
-                <li>1x</li>
                 <li>0.5x</li>
+                <li>1x</li>
                 <li>1.25x</li>
                 <li>1.5x</li>
                 <li>2x</li>
               </ul>
-              <!-- <select class="speed">
-                <option value="1">1x</option>
-                <option value="0.5">0.5x</option>
-                <option value="1.25">1.25x</option>
-                <option value="1.5">1.5x</option>
-                <option value="2">2x</option>
-              </select> -->
             </div>
             <div class="pv-screen ml">
               <i class="iconfont icon-quanping"></i>
@@ -60,9 +62,6 @@
             </div>
           </div>
         </div>
-        <!-- <div id="div3">
-          <div id="div4"></div>
-        </div> -->
       </div>
     </div>
 
@@ -70,27 +69,30 @@
       function $(el) {
         return document.querySelector(el);
       }
-      const aInput = document.getElementsByTagName("input");
-      const oDiv2 = document.getElementById("div2");
       const oDiv3 = document.getElementById("div3");
       const oDiv4 = document.getElementById("div4");
-      const select = document.getElementById("select");
       let timer = null;
       let disX = 0;
-      let disX2 = 0;
+      let disY = 0;
 
       // 底部控制栏
-      // $(".video-box").onmouseenter = function () {
-      //   $(".bottom-tool").style.bottom = "0px";
-      // };
-      // $(".video-box").onmouseleave = function () {
-      //   $(".bottom-tool").style.bottom = "-50px";
-      // };
+      $(".video-box").onmouseenter = function () {
+        $(".bottom-tool").style.bottom = "0px";
+      };
+      $(".video-box").onmouseleave = function () {
+        $(".bottom-tool").style.bottom = "-50px";
+      };
+
+      // 倍速播放栏
       $(".pv-spnum").onmouseover = function () {
         $(".selectList").style.display = "block";
       };
       $(".pv-controls").onmouseleave = function () {
         $(".selectList").style.display = "none";
+        $(".pv-ylbar").style.display = "none";
+      };
+      $(".pv-iconyl").onmouseover = function () {
+        $(".pv-ylbar").style.display = "block";
       };
       // 播放/暂停
       $(".play-btn").onclick = function () {
@@ -111,6 +113,10 @@
       $(".video-player").oncanplay = function () {
         $(".pv-duration").innerHTML = changeTime($(".video-player").duration);
       };
+      $(".video-player").onended = function (params) {
+        $(".icon-bofang").style.display = "block";
+        $(".icon-zanting").style.display = "none";
+      };
       // 播放时长
       function nowTime() {
         $(".pv-currentTime").innerHTML = changeTime(
@@ -123,7 +129,7 @@
         $(".pv-played").style.width = scale * w + "px";
       }
       // 静音/取消静音
-      $(".pv-listen").onclick = function () {
+      $(".pv-iconyl").onclick = function () {
         if ($(".video-player").muted) {
           $(".video-player").volume = 1;
           this.value = "静音";
@@ -190,33 +196,37 @@
         return false;
       };
       // 音量控制
-      // oDiv4.onmousedown = function (ev) {
-      //   let ev1 = ev || window.event;
-      //   disX = ev1.clientX - oDiv4.offsetLeft;
+      $(".pv-ol").onmousedown = function (ev) {
+        let ev1 = ev || window.event;
+        disY = ev1.clientY - $(".pv-ol").offsetTop;
+        console.log(disY);
+        document.onmousemove = function (ev) {
+          let ev2 = ev || window.event;
+          let L = ev2.clientY - disY;
+          if (L < 0) {
+            L = 0;
+          } else if (L > $(".pv-yl").offsetHeight - $(".pv-ol").offsetHeight) {
+            L = $(".pv-yl").offsetHeight - $(".pv-ol").offsetHeight;
+          }
+          $(".pv-ol").style.top = L + "px";
+          let scale = L / ($(".pv-yl").offsetHeight - $(".pv-ol").offsetHeight);
+          $(".pv-bg").style.height = $(".pv-ol").offsetTop + "px";
+          $(".video-player").volume = scale;
+        };
 
-      //   document.onmousemove = function (ev) {
-      //     let ev2 = ev || window.event;
-      //     let L = ev2.clientX - disX;
-      //     if (L < 0) {
-      //       L = 0;
-      //     } else if (L > oDiv3.offsetWidth - oDiv4.offsetWidth) {
-      //       L = oDiv3.offsetWidth - oDiv4.offsetWidth;
-      //     }
-      //     oDiv4.style.left = L + "px";
-      //     let scale = L / (oDiv3.offsetWidth -  oDiv4.offsetWidth);
-      //     $(".video-player").volume = scale;
-      //   };
+        document.onmouseup = function () {
+          document.onmousemove = null;
+        };
 
-      //   document.onmouseup = function () {
-      //     document.onmousemove = null;
-      //   };
-
-      //   return false;
-      // };
+        return false;
+      };
       // 播放速度
-      $(".speed").onchange = function (e) {
+      $(".selectList").onclick = function (e) {
         let ev = e || window.event;
-        $(".video-player").playbackRate = ev.target.value;
+        $(".selectList").style.display = "none";
+        $(".pv-spnum").innerText = e.target.innerText;
+        const value = e.target.innerText.replace("x", "");
+        $(".video-player").playbackRate = value;
       };
       // 全屏
       function fullScreen(el) {
