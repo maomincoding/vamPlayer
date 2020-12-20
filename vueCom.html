@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Document</title>
+    <title>VamVideo(Vue.js版)</title>
     <link rel="stylesheet" href="./css/iconfont/iconfont.css" />
     <link rel="stylesheet" href="./css/index.css" />
   </head>
@@ -16,16 +16,16 @@
     <script>
       Vue.component("vam-video", {
         template: `
-    <div class="video-box" @mouseenter="vp.bottomTup()" onmouseleave="vp.bottomTdow()">
-      <video class="video-player" oncanplay="vp.useOnplay()" onended="vp.useEnd()"></video>
+    <div class="video-box" @mouseenter="vp.bottomTup()" @mouseleave="vp.bottomTdow()">
+      <video class="video-player" @canplay="vp.useOnplay()" @ended="vp.useEnd()"></video>
       <div class="bottom-tool">
         <div class="pv-bar">
           <div class="pv-played"></div>
-          <div class="pv-dot" onmousedown="vp.useTime()"></div>
+          <div class="pv-dot" @mousedown="vp.useTime()"></div>
         </div>
-        <div class="pv-controls" onmouseleave="vp.selectListHide()">
+        <div class="pv-controls" @mouseleave="vp.selectListHide()">
           <div class="pc-con-l">
-            <div class="play-btn" onclick="vp.usePlay()">
+            <div class="play-btn" @click="vp.usePlay()">
               <i class="iconfont icon-bofang"></i>
               <i class="iconfont icon-zanting hide"></i>
             </div>
@@ -38,17 +38,17 @@
           <div class="pc-con-r">
             <div class="pv-listen ml">
               <div class="pv-yl">
-                <p class="pv-ol" onmousedown="vp.useListen()"></p>
+                <p class="pv-ol" @mousedown="vp.useListen()"></p>
                 <p class="pv-bg"></p>
               </div>
-              <div class="pv-iconyl" onclick="vp.useVolume()">
+              <div class="pv-iconyl" @click="vp.useVolume()">
                 <i class="iconfont icon-yinliang"></i>
                 <i class="iconfont icon-jingyin hide"></i>
               </div>
             </div>
             <div class="pv-speed ml">
-              <p class="pv-spnum" onmouseover="vp.selectListShow()">1x</p>
-              <ul class="selectList" onclick="vp.useSpnum()">
+              <p class="pv-spnum" @mouseover="vp.selectListShow()">1x</p>
+              <ul class="selectList" @click="vp.useSpnum()">
                 <li>0.5x</li>
                 <li>1x</li>
                 <li>1.25x</li>
@@ -56,7 +56,7 @@
                 <li>2x</li>
               </ul>
             </div>
-            <div class="pv-screen ml" onclick="vp.fullScreen()">
+            <div class="pv-screen ml" @click="vp.fullScreen()">
               <i class="iconfont icon-quanping"></i>
               <i class="iconfont icon-huanyuan hide"></i>
             </div>
