@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>VamVideo</title>
+    <link rel="stylesheet" href="./css/iconfont/iconfont.css" />
+    <link rel="stylesheet" href="./css/index.css" />
+  </head>
+  <body>
+    <!-- 挂载点 -->
+    <div id="app"></div>
+
+    <script src="./js/strvp.js"></script>
+    <script src="./js/vp.js"></script>
+    <script>
+      const node = document.querySelector("#app");
+      node.insertAdjacentHTML("beforeEnd", strHtml);
+      
+      const vp = new VamVideo(
+        document.querySelector(".video-box"), // 挂载父节点
+        { // 视频属性
+          poster:"./img/bg.png",
+          src:"https://mos-vod-drcn.dbankcdn.cn/P_VT/video_injection/A91343E9D/v3/9AB0A7921049102362779584128/MP4Mix_H.264_1920x1080_6000_HEAAC1_PVC_NoCut.mp4",
+          preload:"auto",
+          // loop:"loop",
+          // autoplay:"autoplay"
+        },
+        { // 视频样式
+          width:"1200px",
+          height:"600px"
+        }
+      );
+    </script>
+  </body>
+</html>

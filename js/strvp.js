@@ -1,14 +1,5 @@
-<!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>VamVideo</title>
-    <link rel="stylesheet" href="./css/iconfont/iconfont.css" />
-    <link rel="stylesheet" href="./css/index.css" />
-  </head>
-  <body>
-    <div class="video-box" onmouseenter="vp.bottomTup()" onmouseleave="vp.bottomTdow()">
+const strHtml = `
+<div class="video-box" onmouseenter="vp.bottomTup()" onmouseleave="vp.bottomTdow()">
       <video class="video-player" oncanplay="vp.useOnplay()" onended="vp.useEnd()"></video>
       <div class="bottom-tool">
         <div class="pv-bar">
@@ -48,7 +39,7 @@
                 <li>2x</li>
               </ul>
             </div>
-            <div class="pv-screen ml" onclick="fullScreen()">
+            <div class="pv-screen ml" onclick="vp.fullScreen()">
               <i class="iconfont icon-quanping"></i>
               <i class="iconfont icon-huanyuan hide"></i>
             </div>
@@ -56,22 +47,4 @@
         </div>
       </div>
     </div>
-    <script src="./js/vp.js"></script>
-    <script>
-      const vp = new VamVideo(
-        document.querySelector(".video-box"), // 挂载父节点
-        { // 视频属性
-          poster:"./img/bg.png",
-          src:"https://mos-vod-drcn.dbankcdn.cn/P_VT/video_injection/A91343E9D/v3/9AB0A7921049102362779584128/MP4Mix_H.264_1920x1080_6000_HEAAC1_PVC_NoCut.mp4",
-          preload:"auto",
-          // loop:"loop",
-          // autoplay:"autoplay"
-        },
-        { // 视频样式
-          width:"1000px",
-          height:"600px"
-        }
-      );
-    </script>
-  </body>
-</html>
+`;
