@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>VamVideo(React.js版)</title>
+    <link rel="stylesheet" href="./css/iconfont/iconfont.css" />
+    <link rel="stylesheet" href="./css/index.css" />
+    <script src="https://cdn.staticfile.org/react/16.4.0/umd/react.development.js"></script>
+    <script src="https://cdn.staticfile.org/react-dom/16.4.0/umd/react-dom.development.js"></script>
+    <script src="https://cdn.staticfile.org/babel-standalone/6.26.0/babel.min.js"></script>
+  </head>
+  <body>
+    <div id="app"></div>
+    <script src="./js/vp.js"></script>
+    <script type="text/babel">
+      class VamVideoPlayer extends React.Component {
+        constructor(props) {
+          super(props);
+          this.vper = null;
+        }
+        vp(v) {
+          this.vper = v;
+        }
+        componentDidMount() {
+          let vps = new VamVideo(
+            document.querySelector(".video-box"), // 挂载父节点
+            {
+              // 视频属性
+              poster: "./img/bg.png",
+              src:
+                "https://mos-vod-drcn.dbankcdn.cn/P_VT/video_injection/A91343E9D/v3/9AB0A7921049102362779584128/MP4Mix_H.264_1920x1080_6000_HEAAC1_PVC_NoCut.mp4",
+              preload: "auto",
+              // loop:"loop",
+              // autoplay:"autoplay"
+            },
+            {
+              // 视频样式
+              width: "1200px",
+              height: "600px",
+            }
+          );
+          this.vp(vps);
+        }
+        render() {
+          return (
+            <div
+              className="video-box"
+              onMouseEnter={() => this.vper.bottomTup()}
+              onMouseLeave={() => this.vper.bottomTdow()}
+            >
+              <video
+                className="video-player"
+                onCanPlay={() => this.vper.useOnplay()}
+                onEnded={() => this.vper.useEnd()}
+              ></video>
+              <div className="bottom-tool">
+                <div className="pv-bar">
+                  <div className="pv-played"></div>
+                  <div
+                    className="pv-dot"
+                    onMouseDown={(e) => this.vper.useTime(e)}
+                  ></div>
+                </div>
+                <div
+                  className="pv-controls"
+                  onMouseLeave={() => this.vper.selectListHide()}
+                >
+                  <div className="pc-con-l">
+                    <div
+                      className="play-btn"
+                      onClick={() => this.vper.usePlay()}
+                    >
+                      <i className="iconfont icon-bofang"></i>
+                      <i className="iconfont icon-zanting hide"></i>
+                    </div>
+                    <div className="pv-time">
+                      <span className="pv-currentTime">00:00:00</span>
+                      <span>/</span>
+                      <span className="pv-duration">00:00:00</span>
+                    </div>
+                  </div>
+                  <div className="pc-con-r">
+                    <div className="pv-listen ml">
+                      <div className="pv-yl">
+                        <p
+                          className="pv-ol"
+                          onMouseDown={(e) => this.vper.useListen(e)}
+                        ></p>
+                        <p className="pv-bg"></p>
+                      </div>
+                      <div
+                        className="pv-iconyl"
+                        onClick={() => this.vper.useVolume()}
+                      >
+                        <i className="iconfont icon-yinliang"></i>
+                        <i className="iconfont icon-jingyin hide"></i>
+                      </div>
+                    </div>
+                    <div className="pv-speed ml">
+                      <p
+                        className="pv-spnum"
+                        onMouseOver={(e) => this.vper.selectListShow(e)}
+                      >
+                        1x
+                      </p>
+                      <ul
+                        className="selectList"
+                        onClick={(e) => this.vper.useSpnum(e)}
+                      >
+                        <li>0.5x</li>
+                        <li>1x</li>
+                        <li>1.25x</li>
+                        <li>1.5x</li>
+                        <li>2x</li>
+                      </ul>
+                    </div>
+                    <div
+                      className="pv-screen ml"
+                      onClick={() => this.vper.fullScreen()}
+                    >
+                      <i className="iconfont icon-quanping"></i>
+                      <i className="iconfont icon-huanyuan hide"></i>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          );
+        }
+      }
+
+      ReactDOM.render(<VamVideoPlayer />, document.getElementById("app"));
+    </script>
+  </body>
+</html>
